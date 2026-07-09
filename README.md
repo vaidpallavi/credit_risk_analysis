@@ -1,12 +1,46 @@
-# Quantitative Credit Scoring & Cost-Optimized Underwriting System
+# Banking Credit Risk Underwriting Scorecard Engine
 
-## Overview
-This repository contains an automated credit score underwriting pipeline designed around modern transactional data. Moving beyond lagging, traditional credit bureau metrics, this engine utilizes real-time bank ledger insights—such as recurring debit bounce flags, variable cash flow buffers, and transaction risk profiles—to predict structural consumer defaults.
-
-The business purpose is to establish an automated underwriting decision model that balances potential default write-offs against missed customer conversion interest margins.
+An end-to-end machine learning underwriting pipeline built on consumer credit histories. This project develops a credit scorecard system that shifts away from generic metrics to target automated binary risk evaluation and portfolio loss minimization.
 
 ---
 
+## 📊 Core Portfolio Risk Drivers
+
+Before building the models, we analyzed the clear behavioral patterns separating low-risk applicants from high-risk defaults:
+
+![Key Transactional Drivers](modern_risk_drivers.png)
+
+* **Key Insight:** Delinquency patterns are heavily non-linear. Individuals with regular past-due occurrences show a massive increase in baseline default rates.
+
+---
+
+## ⚡ Feature Architecture & Importance
+
+Using a Random Forest ensemble model, we calculated the structural importance of each client vector to identify what truly drives a bad credit classification:
+
+![Feature Importance Weights](fintech_feature_importance.png)
+
+### Risk Telemetry Matrices
+To map how tightly these behaviors move together, we engineered a global portfolio correlation matrix:
+
+![Risk Correlation Heatmap](risk_correlation_heatmap.png)
+
+---
+
+## 📈 Machine Learning Benchmarks & Model Separation
+
+We built a champion-challenger framework using multiple algorithms to test out-of-sample data. Performance is measured using ROC-AUC and the **Regulatory Gini Index** ($2 \times \text{AUC} - 1$), which is the industry standard for risk committee validation.
+
+![ROC Discriminatory Curves](roc_curve_comparison.png)
+
+### Model Metric Summary
+* **Logistic Regression (Baseline):** AUC: **0.8600** | Gini: **0.7201**
+* **Random Forest (Challenger):** AUC: **0.9017** | Gini: **0.8035**
+
+### Portfolio Credit Score Distribution
+Our internal `prob_to_score` translation function safely scales individual risk percentages back to a traditional 300–850 credit scorecard metric:
+
+![Credit Score Density Profile](credit_score_distribution.png)
 ## Performance Matrix & Model Benchmarks
 
 A challenger model framework was evaluated using a stratified 20% validation split. The models achieved the following out-of-sample performance:
@@ -16,31 +50,20 @@ A challenger model framework was evaluated using a stratified 20% validation spl
 | **XGBoost Classifier** | **0.9037** | **0.8073** | **Production Champion** |
 | Random Forest | 0.9017 | 0.8035 | Core Challenger |
 | Logistic Regression | 0.8600 | 0.7201 | Baseline Interpretation |
+---
 
-*Note: The Gini Index ($2 \times \text{AUC} - 1$) is the core standard used by internal risk compliance teams and external bank regulators to evaluate model separation stability.*
+## 💰 Commercial Loss Optimization Loop
+
+Traditional models assume a 50% classification threshold is optimal. In banking, a **False Negative** (approving someone who defaults) costs significantly more ($5,000 principal write-off) than a **False Positive** (rejecting a safe applicant, costing a $500 margin).
+
+By testing thresholds against our operational cost equation, the engine found that a strict **10% probability cutoff** minimizes total business exposure:
+
+* **Threshold 50%:** Total Misclassification Cost = **$976,000**
+* **Threshold 10% (Optimized):** Total Misclassification Cost = **$386,000**
 
 ---
 
-## Core Infrastructure Engineering
-
-### Class Equalization Engine (SMOTE)
-Consumer defaults represent a natural minority class within standard loan books (15.51% default rate in this portfolio). To prevent model bias toward majority approvals, the training partition was synthetically equalized using a SMOTE framework. This rebalancing process is kept strictly post-split to preserve data integrity and prevent validation leakage.
-
-### Balance Sheet Loss Optimization Matrix
-Instead of standard statistical evaluations that rely on a generic 50% probability boundary, this pipeline maps underwriting choices directly to financial results using an explicit banking loss optimization formula:
-* **False Negative Cost ($5,000):** Misclassifying a high-risk applicant as safe, resulting in unpaid debt principal.
-* **False Positive Cost ($500):** Turning down a creditworthy customer, resulting in lost interest margin.
-
-The system tests multiple threshold options to find the exact configuration that minimizes overall credit risk and financial loss.
-
----
-
-## Analytical & Visual Data Portfolio Assets
-*(Running the notebook updates and outputs these diagnostic files to your root repository directory)*
-* `modern_risk_drivers.png`: Focus boxplots highlighting transactional anomalies across risk groups.
-* `fintech_feature_importance.png`: Feature weight ranking showing the top 10 indicators driving credit risk.
-* `roc_curve_comparison.png`: Evaluation chart tracking true positive and false positive rates.
-* `risk_correlation_heatmap.png`: Matrix mapping inner linear correlations against the primary default flag.
-* `bounce_risk_rate.png`: Step-chart showing default progression scaling directly against account bounce counts.
-* `credit_score_distribution.png`: Density profiles verifying clean portfolio separation across risk cutoffs.
-* `salary_vs_risk.png`: Log-scaled income distribution plot showing structural salary ranges across risk tiers.
+## 🚀 Deployment Strategy Mandates
+1. **Automated Approvals:** Instantly pass any applicant scoring above **550** on the engineered scorecard.
+2. **Dynamic Risk Scale-Down:** Automatically reduce credit limits by 25% for every additional late payment flag recorded on an active ledger.
+3. **Loss Mitigation:** Deploy at the **10% risk probability cutoff** to save the institution over **$590,000** in unoptimized portfolio write-offs.
