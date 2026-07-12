@@ -36,6 +36,7 @@ We built a champion-challenger framework using multiple algorithms to test out-o
 ### Model Metric Summary
 * **Logistic Regression (Baseline):** AUC: **0.8600** | Gini: **0.7201**
 * **Random Forest (Challenger):** AUC: **0.9017** | Gini: **0.8035**
+* **XGBoost (Production Champion):** AUC: **0.9037** | Gini: **0.8073**
 
 ### Portfolio Credit Score Distribution
 Our internal `prob_to_score` translation function safely scales individual risk percentages back to a traditional 300–850 credit scorecard metric:
